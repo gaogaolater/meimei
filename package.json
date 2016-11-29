@@ -1,0 +1,29 @@
+{
+  "name": "meimei_spider",
+  "version": "1.0.0",
+  "description": "",
+  "main": "spider.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gaogaolater/meimei.git"
+  },
+  "keywords": [
+    "spider",
+    "girl"
+  ],
+  "author": "gaogao",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gaogaolater/meimei/issues"
+  },
+  "homepage": "https://github.com/gaogaolater/meimei#readme",
+  "dependencies": {
+    "bufferhelper": "^0.2.1",
+    "cheerio": "^0.22.0",
+    "iconv-lite": "^0.4.15",
+    "request": "^2.79.0"
+  }
+}
