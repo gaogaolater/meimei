@@ -41,27 +41,52 @@ var urls = [
 
 for (var i = 0; i < urls.length; i++) {
     //注意变量作用域
-    (function (i) {
-        var urlItem = domain + urls[i].url;
-        var urlType = urls[i].name;
-        http.get(urlItem, function (res) {
+    var listLink = domain + urls[i].url;
+    var urlType = urls[i].name;
+    getList(listLink, urlType, 1);
+}
+
+var listTask = [];
+function getList(listLink, urlType, index) {
+    (function(listLink, urlType, index) {
+        http.get(listLink, function(res) {
             var bufferHelper = new BufferHelper();
-            res.on('data', function (chunk) {
+            res.on('data', function(chunk) {
                 bufferHelper.concat(chunk);
             });
-            res.on('end', function () {
+            res.on('end', function() {
                 var html = iconv.decode(bufferHelper.toBuffer(), 'GBK');
                 var $ = cheerio.load(html);
-                $(".list-left").find("a[target='_blank']").each(function () {
-                    var picName = $(this).find("img").attr("alt");
-                    var href = $(this).attr("href");
-                    getDetailPage(href, picName, urlType);
-                });
+                if (index != 1) {
+                    $(".list-left").find("a[target='_blank']").each(function() {
+                        var picName = $(this).find("img").attr("alt");
+                        var href = $(this).attr("href");
+                        getDetailPage(href, picName, urlType);
+                    });
+                }
+                if (index == 1) {
+                    var firstLink = $(".page-en").first().attr("href");
+                    var lastLink = $(".page-en").last().attr("href");
+                    //结果 ["list_6_21.html", "list_6", "21"]
+                    var matchResult = firstLink.match(/(.+)_(\d+).html/);
+                    var linktpl = matchResult[1];
+                    var minNum = parseInt(matchResult[2]);
+                    var maxNum = parseInt(lastLink.match(/_(\d+).html/)[1]);
+                    for (var i = minNum; i <= maxNum; i++) {
+                        //getList(linktpl + "_" + i + ".html", urlType, 2);
+                        var json = {
+                            link: listLink + linktpl + "_" + i + ".html",
+                            urlType: urlType
+                        };
+                        listTask.push(json);
+                        //fs.appendFileSync('./data/src.txt',JSON.stringify(json)+"\r\n", 'utf8');
+                    }
+                }
             });
-        }).on('error', function (e) {
+        }).on('error', function(e) {
             console.log(e);
         })
-    })(i);
+    })(listLink, urlType, index);
 }
 
 function getDetailPage(href, name, type) {
@@ -74,12 +99,12 @@ function getDetailPage(href, name, type) {
         fs.mkdirSync(picPath);
     }
     var index = 0;
-    http.get(href, function (res) {
+    http.get(href, function(res) {
         var bufferHelper = new BufferHelper();
-        res.on('data', function (chunk) {
+        res.on('data', function(chunk) {
             bufferHelper.concat(chunk);
         });
-        res.on('end', function () {
+        res.on('end', function() {
             var html = iconv.decode(bufferHelper.toBuffer(), 'GBK');
             var $ = cheerio.load(html);
             var maxIndex = $(".content-page span").eq(0).text().match(/\d+/)[0];
@@ -92,7 +117,7 @@ function getDetailPage(href, name, type) {
                 saveImages(imgUrl, savePath);
             }
         });
-    }).on('error', function (e) {
+    }).on('error', function(e) {
         console.log(e);
     })
 }
@@ -104,31 +129,35 @@ function saveImages(imgUrl, savePath) {
 
 
 function saveImg(imgUrl, savePath) {
-    http.get(imgUrl, function (res) {
-        var imgData = "";
-        res.setEncoding("binary");
-        res.on("data", function (chunk) {
-            imgData += chunk;
-        });
-        res.on("end", function () {
-            fs.writeFile(savePath, imgData, "binary", function (err) {
-                if (err) {
-                    console.log("down fail");
-                }
+    if (!fs.existsSync(savePath)) {
+        http.get(imgUrl, function(res) {
+            var imgData = "";
+            res.setEncoding("binary");
+            res.on("data", function(chunk) {
+                imgData += chunk;
             });
-            console.log("save:" + savePath + " size:" + taskList.length);
+            res.on("end", function() {
+                fs.writeFile(savePath, imgData, "binary", function(err) {
+                    if (err) {
+                        console.log("down fail");
+                    }
+                });
+                console.log("save:" + savePath + " size:" + taskList.length);
+                currentTaskCount--;
+            });
+        }).on('error', function(e) {
+            console.log(e);
             currentTaskCount--;
         });
-    }).on('error', function (e) {
-        console.log(e);
+    } else {
         currentTaskCount--;
-    });
+    }
 }
 
-var maxTaskCount = 5;
+var maxTaskCount = 100;
 var currentTaskCount = 0;
 var maxTryTimes = 30;
-var timer = setInterval(function () {
+var timer = setInterval(function() {
     if (currentTaskCount < maxTaskCount) {
         if (taskList.length > 0) {
             currentTaskCount++;
@@ -137,7 +166,12 @@ var timer = setInterval(function () {
         }
     }
     if (taskList.length == 0) {
-        maxTryTimes--;
+        if (listTask.length > 0) {
+            var listJson = listTask.shift();
+            getList(listJson.link, listJson.urlType);
+        } else {
+            maxTryTimes--;
+        }
     } else {
         maxTryTimes = 30;
     }
