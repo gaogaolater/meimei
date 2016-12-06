@@ -1,0 +1,41 @@
+*{
+    margin:0;
+    padding:0;
+    font-family: "Microsoft Yahei";
+}
+header{
+    background:#ff7fa4;
+    text-align:center;
+    color:white;
+    height: 40px;
+    line-height: 40px;
+    font-size:.9rem;
+}
+nav{
+    height:40px;
+    font-size:.7rem;
+    border-bottom:1px solid lightgray;
+    a{
+        &.active{
+            color:#ff7fa4;
+            font-size:.8rem;
+        }
+        color:gray;
+        text-align:center;
+        line-height:40px;
+        display:inline-block;
+        width:25%;
+        float:left;
+    }
+}
+.imglist{
+    position:relative;
+    list-style:none;
+    margin:.5rem .25rem;
+    li{
+        img{
+            width:100%;
+            height:auto;
+        }
+    }
+}
