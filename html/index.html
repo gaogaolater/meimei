@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>图片展示</title>
+    <link rel="stylesheet" type="text/css" href="css/common.css" />
+    <link rel="stylesheet" type="text/css" href="swiper/css/swiper.min.css" />
+    <style>
+
+    </style>
+    <script>
+            var maxWidth = document.documentElement.clientWidth>600?600:document.documentElement.clientWidth;
+            var fontsize = maxWidth/320;
+            document.getElementsByTagName("html")[0].setAttribute("style","font-size:"+fontsize+"rem;");
+        </script>
+    <script src="js/jquery-3.1.1.min.js"></script>
+</head>
+
+<body>
+    <!--瀑布流页面-->
+    <div class="page waterfall" id="waterfall">
+        <header>神马美图</header>
+        <nav>
+            <a class="active">美女</a>
+            <a>萌宠</a>
+            <a>动漫</a>
+            <a>摄影</a>
+        </nav>
+        <ul id="imglist" class="imglist">
+        </ul>
+        <footer></footer>
+    </div>
+
+    <!--图片详情页面-->
+    <div class="page imgdetail" id="imgdetail" style="display:none;">
+        <header>
+            <a id="back"></a>
+            <span>何彦霓海边极品身材比基尼秀</span>
+        </header>
+        <div class="swiper-container">
+            <div class="swiper-wrapper"></div>
+        </div>
+        <div class="swiper-pagination"></div>
+    </div>
+    <script src="js/fastclick.js"></script>
+    <script src="swiper/js/swiper.jquery.min.js"></script>
+    <script src="js/index.js"></script>
+</body>
+</html>

@@ -4,34 +4,38 @@ $(function () {
         $(this).addClass("active");
     });
 
-    var data = [
-        {
-            src: '1.jpg',
-            des: '美女1',
-            num: 6
-        },
-        {
-            src: '2.jpg',
-            des: '美女2',
-            num: 5
-        },
-        {
-            src: '3.jpg',
-            des: '美女3',
-            num: 1
-        },
-        {
-            src: '4.jpg',
-            des: '美女4',
-            num: 4
-        },
-        {
-            src: '5.jpg',
-            des: '美女5',
-            num: 6
-        },
-    ];
-    addImgList("imglist", data);
+    $("#imglist").on("click","img",function(){
+        $("#waterfall").hide();
+        $("#imgdetail").show();
+        var maxNum = parseInt($(this).next().text());
+        var src = $(this).attr("src");
+        var wraper = $(".swiper-wrapper").html("");
+        for(var i=1;i<maxNum;i++){
+            wraper.append("<div class='swiper-slide'><img src='"+(src.replace("1.",i+"."))+"'/></div>");
+        }
+        mySwiper = new Swiper('.swiper-container', {
+            loop: true,
+            spaceBetween : 10,
+            pagination: '.swiper-pagination',
+            paginationType : 'fraction',
+            paginationFractionRender: function (swiper, currentClassName, totalClassName) {
+            return '<span class="' + currentClassName + '"></span>' +
+                    '/' +
+                    '<span class="' + totalClassName + '"></span>';
+            }
+        });
+    });
+
+    $("#back").click(function(){
+        $("#imgdetail").hide();
+        $("#waterfall").show();
+        mySwiper.destroy();
+    });
+
+    $.get("/getlist",function(obj){
+        console.log(obj);
+        addImgList("imglist", obj.data);
+    });
 });
 
 var leftImgTop = 0;
@@ -40,12 +44,12 @@ var header = "data/性感/何彦霓海边极品身材比基尼秀/"
 function addImgList(containerId, imgList) {
     var container = $("#" + containerId);
     var clientWidth = container.width();
-    var itemWidth = clientWidth / 2 - 2;
+    var itemWidth = parseInt(clientWidth / 2 - 2);
     for (var i = 0; i < imgList.length; i++) {
         (function (i) {
             var item = imgList[i];
             var img = new Image();
-            img.src = header + item.src;
+            img.src = item.src;
             img.alt = imgList[i].des;
             img.onload = function () {
                 var $li = $(document.createElement("li"));
@@ -55,10 +59,10 @@ function addImgList(containerId, imgList) {
                 $li.append($span);
                 var height = parseInt((itemWidth / this.width) * this.height);
                 if (leftImgTop <= rightImgTop) {
-                    $li.css({ top: leftImgTop, left: 0, width: itemWidth });
+                    $li.css({ top: leftImgTop, left: 0, width: itemWidth,height:height });
                     leftImgTop += height + 5;
                 } else {
-                    $li.css({ top: rightImgTop, right: 0, width: itemWidth });
+                    $li.css({ top: rightImgTop, right: 0, width: itemWidth,height:height });
                     rightImgTop += height + 5;
                 }
                 container.append($li);
