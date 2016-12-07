@@ -3,6 +3,10 @@
     padding:0;
     font-family: "Microsoft Yahei";
 }
+body{
+    max-width:600px;
+    margin:0 auto;
+}
 header{
     background:#ff7fa4;
     text-align:center;
@@ -20,6 +24,7 @@ nav{
             color:#ff7fa4;
             font-size:.8rem;
         }
+        cursor: pointer;
         color:gray;
         text-align:center;
         line-height:40px;
@@ -33,9 +38,20 @@ nav{
     list-style:none;
     margin:.5rem .25rem;
     li{
+        position:absolute;
         img{
             width:100%;
             height:auto;
+        }
+        span{
+            position:absolute;
+            bottom:0;
+            right:0;
+            display: block;
+            width:20px;
+            height:20px;
+            //opacity: alpha(.5);
+            background-color:#000;
         }
     }
 }

@@ -7,27 +7,27 @@ $(function () {
     var data = [
         {
             src: '1.jpg',
-            des: '美女',
+            des: '美女1',
             num: 6
         },
         {
             src: '2.jpg',
-            des: '美女',
+            des: '美女2',
             num: 5
         },
         {
             src: '3.jpg',
-            des: '美女',
+            des: '美女3',
             num: 1
         },
         {
             src: '4.jpg',
-            des: '美女',
+            des: '美女4',
             num: 4
         },
         {
             src: '5.jpg',
-            des: '美女',
+            des: '美女5',
             num: 6
         },
     ];
@@ -42,22 +42,27 @@ function addImgList(containerId, imgList) {
     var clientWidth = container.width();
     var itemWidth = clientWidth / 2 - 2;
     for (var i = 0; i < imgList.length; i++) {
-        var item = imgList[i];
-        var img = new Image();
-        img.src = header + item.src;
-        img.onload = function () {
-            var li = document.createElement("li");
-            li.appendChild(this);
-            $(li).css({position:'absolute'});
-            var height = parseInt((itemWidth / this.width) * this.height);
-            if (leftImgTop <= rightImgTop) {
-                $(li).css({ top: leftImgTop, left: 0, width: itemWidth });
-                leftImgTop += height+5;
-            } else {
-                $(li).css({ top: rightImgTop, right: 0, width: itemWidth });
-                rightImgTop += height+5;
+        (function (i) {
+            var item = imgList[i];
+            var img = new Image();
+            img.src = header + item.src;
+            img.alt = imgList[i].des;
+            img.onload = function () {
+                var $li = $(document.createElement("li"));
+                $li.append(this);
+                var $span = $(document.createElement("span"));
+                $span.text(item.num);
+                $li.append($span);
+                var height = parseInt((itemWidth / this.width) * this.height);
+                if (leftImgTop <= rightImgTop) {
+                    $li.css({ top: leftImgTop, left: 0, width: itemWidth });
+                    leftImgTop += height + 5;
+                } else {
+                    $li.css({ top: rightImgTop, right: 0, width: itemWidth });
+                    rightImgTop += height + 5;
+                }
+                container.append($li);
             }
-            container.append(li);
-        }
+        })(i);
     }
 }
