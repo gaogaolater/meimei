@@ -4,7 +4,9 @@ $(function () {
         $(this).addClass("active");
     });
 
+    scrollTop = 0;
     $("#imglist").on("click", "img", function () {
+        scrollTop = document.body.scrollTop;
         $("#waterfall").hide();
         $("#imgdetail").show();
         var maxNum = parseInt($(this).next().text());
@@ -29,11 +31,15 @@ $(function () {
     $("#back").click(function () {
         $("#imgdetail").hide();
         $("#waterfall").show();
+        document.body.scrollTop = scrollTop;
         mySwiper.destroy();
     });
+
     loadImg();
-    if (document.body.scrollTop + document.documentElement.clientHeight >= document.body.scrollHeight) {
-        loadImg();
+    window.onscroll = function(){
+        if (document.body.scrollTop + document.documentElement.clientHeight >= document.body.scrollHeight) {
+            loadImg();
+        }
     }
 });
 
@@ -62,8 +68,8 @@ function addImgList(containerId, imgList) {
             img.alt = item.name;
             img.onload = function () {
                 var $li = $(document.createElement("li"));
-                //$li.append(this);
-                $li.append("<img alt='" + item.name.substring(0, 4) + "' src=''/>");
+                $li.append(this);
+                //$li.append("<img alt='" + item.name.substring(0, 4) + "' src=''/>");
                 var $span = $(document.createElement("span"));
                 $span.text(item.num);
                 $li.append($span);

@@ -1,34 +1,31 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta http-equiv="Cache-Control" content="no-cache">
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
-    <title>图片展示</title>
+    <title>美女图</title>
+    <meta name="keywords" content="美女,性感,性感美女">
+    <meta name="description" content="美女,性感,性感美女">
     <link rel="stylesheet" type="text/css" href="css/common.css" />
     <link rel="stylesheet" type="text/css" href="swiper/css/swiper.min.css" />
-    <style>
-
-    </style>
     <script>
             var maxWidth = document.documentElement.clientWidth>600?600:document.documentElement.clientWidth;
             var fontsize = maxWidth/320;
             document.getElementsByTagName("html")[0].setAttribute("style","font-size:"+fontsize+"rem;");
-        </script>
+    </script>
     <script src="js/jquery-3.1.1.min.js"></script>
 </head>
-
 <body>
     <!--瀑布流页面-->
     <div class="page waterfall" id="waterfall">
         <header>神马美图</header>
-        <nav>
+        <!-- <nav>
             <a class="active">美女</a>
             <a>萌宠</a>
             <a>动漫</a>
             <a>摄影</a>
-        </nav>
+        </nav> -->
         <ul id="imglist" class="imglist">
         </ul>
         <footer></footer>
