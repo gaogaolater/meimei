@@ -32,11 +32,20 @@ $(function () {
         mySwiper.destroy();
     });
 
-    $.get("/getlist",function(obj){
-        console.log(obj);
+    loadImg();
+    if(document.body.scrollHeight >= document.body.scrollTop+document.documentElement.clientHeight){
+        loadImg();
+    }
+});
+
+var pagesize = 20;
+var pagenum = 1;
+function loadImg(){
+    $.get("/getlist?pagenum="+pagenum+"&pagesize="+pagesize,function(obj){
+        pagenum++;
         addImgList("imglist", obj.data);
     });
-});
+}
 
 var leftImgTop = 0;
 var rightImgTop = 0;
@@ -47,10 +56,11 @@ function addImgList(containerId, imgList) {
     var itemWidth = parseInt(clientWidth / 2 - 2);
     for (var i = 0; i < imgList.length; i++) {
         (function (i) {
+            //num name tag
             var item = imgList[i];
             var img = new Image();
-            img.src = item.src;
-            img.alt = imgList[i].des;
+            img.src = "/data/"+item.tag+"/"+item.name+"/1.jpg";
+            img.alt = item.name;
             img.onload = function () {
                 var $li = $(document.createElement("li"));
                 $li.append(this);
