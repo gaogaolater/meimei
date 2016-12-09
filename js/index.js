@@ -1,16 +1,32 @@
-$(function () {
-    $("nav a").click(function () {
+$(function() {
+
+    window.onhashchange = function() {
+        var hash = location.hash;
+        if (hash == "") {
+            //back
+            $("#imgdetail").hide();
+            $("#waterfall").show();
+            document.body.scrollTop = scrollTop;
+            mySwiper.destroy();
+        }else if(hash == "detail"){
+            
+        }
+    }
+
+    $("nav a").click(function() {
         $("nav a").removeClass("active");
         $(this).addClass("active");
     });
 
     scrollTop = 0;
-    $("#imglist").on("click", "img", function () {
+    $("#imglist").on("click", "img", function() {
         scrollTop = document.body.scrollTop;
         $("#waterfall").hide();
         $("#imgdetail").show();
         var maxNum = parseInt($(this).next().text());
         var src = $(this).attr("src");
+        var name = $(this).attr("alt");
+        $("#pic_name").text(name);
         log(src);
         var wraper = $(".swiper-wrapper").html("");
         for (var i = 1; i < maxNum; i++) {
@@ -23,23 +39,22 @@ $(function () {
             paginationType: 'fraction',
             preloadImages: false,
             lazyLoading: true,
-            paginationFractionRender: function (swiper, currentClassName, totalClassName) {
+            paginationFractionRender: function(swiper, currentClassName, totalClassName) {
                 return '<span class="' + currentClassName + '"></span>' +
                     '/' +
                     '<span class="' + totalClassName + '"></span>';
             }
         });
+        location.href="#detail";
     });
 
-    $("#back").click(function () {
-        $("#imgdetail").hide();
-        $("#waterfall").show();
-        document.body.scrollTop = scrollTop;
-        mySwiper.destroy();
+    $("#back").click(function() {
+        console.log("back");
+
     });
 
     loadImg();
-    window.onscroll = function(){
+    window.onscroll = function() {
         if (document.body.scrollTop + document.documentElement.clientHeight >= document.body.scrollHeight) {
             loadImg();
         }
@@ -49,7 +64,8 @@ $(function () {
 var pagesize = 10;
 var pagenum = 1;
 function loadImg() {
-    $.get("/getlist?pagenum=" + pagenum + "&pagesize=" + pagesize, function (obj) {
+    $.get("/getlist?pagenum=" + pagenum + "&pagesize=" + pagesize, function(obj) {
+        console.log(obj);
         pagenum++;
         addImgList("imglist", obj.data);
     });
@@ -63,13 +79,13 @@ function addImgList(containerId, imgList) {
     var clientWidth = container.width();
     var itemWidth = parseInt(clientWidth / 2 - 2);
     for (var i = 0; i < imgList.length; i++) {
-        (function (i) {
+        (function(i) {
             //num name tag
             var item = imgList[i];
             var img = new Image();
             img.src = "/data/" + item.tag + "/" + item.name + "/1.jpg";
             img.alt = item.name;
-            img.onload = function () {
+            img.onload = function() {
                 var $li = $(document.createElement("li"));
                 $li.append(this);
                 //$li.append("<img alt='" + item.name.substring(0, 4) + "' src=''/>");
@@ -90,6 +106,6 @@ function addImgList(containerId, imgList) {
     }
 }
 
-function log(msg){
+function log(msg) {
     _hmt.push(["_trackEvent", msg, msg]);
 }
