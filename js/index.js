@@ -13,13 +13,15 @@ $(function () {
         var src = $(this).attr("src");
         var wraper = $(".swiper-wrapper").html("");
         for (var i = 1; i < maxNum; i++) {
-            wraper.append("<div class='swiper-slide'><img src='" + (src.replace("1.", i + ".")) + "'/></div>");
+            wraper.append("<div class='swiper-slide'><img class='swiper-lazy' data-src='" + (src.replace("1.", i + ".")) + "'/></div>");
         }
         mySwiper = new Swiper('.swiper-container', {
             loop: true,
             spaceBetween: 10,
             pagination: '.swiper-pagination',
             paginationType: 'fraction',
+            preloadImages: false,
+            lazyLoading: true,
             paginationFractionRender: function (swiper, currentClassName, totalClassName) {
                 return '<span class="' + currentClassName + '"></span>' +
                     '/' +
@@ -43,7 +45,7 @@ $(function () {
     }
 });
 
-var pagesize = 20;
+var pagesize = 10;
 var pagenum = 1;
 function loadImg() {
     $.get("/getlist?pagenum=" + pagenum + "&pagesize=" + pagesize, function (obj) {
