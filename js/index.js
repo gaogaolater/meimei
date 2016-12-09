@@ -11,6 +11,7 @@ $(function () {
         $("#imgdetail").show();
         var maxNum = parseInt($(this).next().text());
         var src = $(this).attr("src");
+        log(src);
         var wraper = $(".swiper-wrapper").html("");
         for (var i = 1; i < maxNum; i++) {
             wraper.append("<div class='swiper-slide'><img class='swiper-lazy' data-src='" + (src.replace("1.", i + ".")) + "'/></div>");
@@ -87,4 +88,8 @@ function addImgList(containerId, imgList) {
             }
         })(i);
     }
+}
+
+function log(msg){
+    _hmt.push(["_trackEvent", msg, msg]);
 }
