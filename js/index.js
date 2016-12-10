@@ -9,7 +9,7 @@ $(function() {
             document.body.scrollTop = scrollTop;
             mySwiper.destroy();
         }else if(hash == "detail"){
-            
+
         }
     }
 
@@ -50,7 +50,7 @@ $(function() {
 
     $("#back").click(function() {
         console.log("back");
-
+        history.go(-1);
     });
 
     loadImg();
