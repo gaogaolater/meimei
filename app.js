@@ -48,9 +48,8 @@ function getPageData(pagenum, pagesize) {
 				}
 			}
 		}
-	}
-	//取缓存
-	if (imgCache.length > 0) {
+	} else {
+		//取缓存
 		var start = (pagenum - 1) * pagesize;
 		var end = pagenum * pagesize - 1;
 		var total = imgCache.length;
@@ -61,9 +60,15 @@ function getPageData(pagenum, pagesize) {
 	return null;
 }
 
+var imgCacheLink = [];
+function getPageDataOrigin(pagenum, pagesize){
+
+}
+
 app.get("/getlist", function (req, res, next) {
 	var pagesize = req.query.pagesize;
 	var pagenum = req.query.pagenum;
+	var type = req.query.type;
 	if (isNaN(pagesize) || isNaN(pagenum)) {
 		res.send({ ok: 0, data: null, err_msg: 'no pagesize or pagenum' });
 		return;
@@ -76,7 +81,13 @@ app.get("/getlist", function (req, res, next) {
 		res.send({ ok: 0, data: null, err_msg: 'pagenum err' });
 		return;
 	}
-	res.send({ ok: 1, data: getPageData(pagenum, pagesize), err_msg: '' });
+	var data = null;
+	if(type=="local"){
+		data = getPageData(pagenum, pagesize);
+	}else{
+		data = getPageDataOrigin(pagenum, pagesize);
+	}
+	res.send({ ok: 1, data: data, err_msg: '' });
 });
 
 var server = app.listen(3000, function () {
