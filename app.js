@@ -60,10 +60,44 @@ function getPageData(pagenum, pagesize) {
 	return null;
 }
 
+/**
+ * 缓存数据结构
+ {
+	num:0,
+	name:'',
+	tag:'',
+	index:''
+ }
+ */
 var imgCacheLink = [];
-function getPageDataOrigin(pagenum, pagesize){
-
+function getPageDataOrigin(pagenum, pagesize) {
+	if (imgCacheLink.length > 0) {
+		//取缓存
+		var start = (pagenum - 1) * pagesize;
+		var end = pagenum * pagesize - 1;
+		var total = imgCacheLink.length;
+		if (start > total) return null;
+		if (end > total - 1) end = total - 1;
+		return imgCacheLink.slice(start, end);
+	} else {
+		var data = fs.readFileSync('./data/src.txt', 'utf8');
+		var arr = data.split("\r\n");
+		arr.forEach(v => {
+			var line = v.split(",");
+			if (line.length == 4) {
+				imgCacheLink.push({
+					num: line[3],
+					name: line[1],
+					tag: line[0],
+					index: line[2]
+				});
+			}
+		});
+	}
 }
+//初始化缓存
+getPageData();
+getPageDataOrigin();
 
 app.get("/getlist", function (req, res, next) {
 	var pagesize = req.query.pagesize;
@@ -82,9 +116,9 @@ app.get("/getlist", function (req, res, next) {
 		return;
 	}
 	var data = null;
-	if(type=="local"){
+	if (type == "local") {
 		data = getPageData(pagenum, pagesize);
-	}else{
+	} else {
 		data = getPageDataOrigin(pagenum, pagesize);
 	}
 	res.send({ ok: 1, data: data, err_msg: '' });
