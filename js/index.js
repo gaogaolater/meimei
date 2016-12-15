@@ -55,20 +55,25 @@ $(function () {
 
     loadImg();
     window.onscroll = function () {
-        if (document.body.scrollTop + document.documentElement.clientHeight >= document.body.scrollHeight) {
+        if (document.body.scrollTop + document.documentElement.clientHeight+100 >= document.body.scrollHeight) {
             loadImg();
         }
     }
 });
-
+var locker = false;
 var pagesize = 10;
 var pagenum = 1;
 function loadImg() {
-    $.get("/getlist?type=" + type + "&pagenum=" + pagenum + "&pagesize=" + pagesize, function (obj) {
-        console.log(obj);
-        pagenum++;
-        addImgList("imglist", obj.data);
-    });
+    $(".loading").show();
+    if(locker == false){
+        locker = true;
+        $.get("/getlist?type=" + type + "&pagenum=" + pagenum + "&pagesize=" + pagesize, function (obj) {
+            console.log(obj);
+            pagenum++;
+            addImgList("imglist", obj.data);
+            locker = false;
+        });
+    }
 }
 
 var leftImgTop = 0;
@@ -90,6 +95,7 @@ function addImgList(containerId, imgList) {
             }
             img.alt = item.name;
             img.onload = function () {
+                $(".loading").hide();
                 var $li = $(document.createElement("li"));
                 $li.append(this);
                 //$li.append("<img alt='" + item.name.substring(0, 4) + "' src=''/>");

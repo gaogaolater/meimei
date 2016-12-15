@@ -17,6 +17,19 @@ body{
     position:relative;
 }
 .waterfall{
+    .loading{
+        display: none;
+        width:60px;
+        position:fixed;
+        bottom:10px;
+        left:50%;
+        margin-left:-30px;
+        font-size: 10px;
+        margin-left: -30px;
+        background: rgba(0,0,0,.3);
+        color: white;
+        text-align: center;
+    }
     header{
         background:#ff7fa4;
         text-align:center;
@@ -46,7 +59,7 @@ body{
     .imglist{
         position:relative;
         list-style:none;
-        margin:.5rem .25rem;
+        margin:.25rem;
         li{
             position:absolute;
             img{
@@ -78,6 +91,7 @@ body{
         background-size: 11px 20px;
         z-index: 2;
         width:100%;
+        background: rgba(0,0,0,.5);
         span{
             position:absolute;
             left:7%;
@@ -135,7 +149,10 @@ body{
     }
 
     .swiper-pagination{
+        bottom:0px;
+        height:40px;
+        line-height: 40px;
         color:#fff;
-        background:rgba(0,0,0,.2);
+        background:rgba(0,0,0,.5);
     }
 }
