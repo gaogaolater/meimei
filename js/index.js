@@ -91,7 +91,7 @@ function addImgList(containerId, imgList) {
             if (type == "local") {
                 img.src = "/data/" + item.tag + "/" + item.name + "/1.jpg";
             } else {
-                img.src = "http://img1.mm131.com/pic/"+item.index+"/1.jpg";
+                img.src = "http://image1.xiaohaibaomu.com/"+item.index+"/1.jpg";
             }
             img.alt = item.name;
             img.onload = function () {
