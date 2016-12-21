@@ -152,3 +152,16 @@ body {
   color: #fff;
   background: rgba(0, 0, 0, 0.5);
 }
+.imgdetail #origin_url {
+  position: fixed;
+  bottom: 12px;
+  left: 10px;
+  border: 1px solid white;
+  text-align: center;
+  height: 20px;
+  line-height: 20px;
+  color: white;
+  z-index: 11;
+  font-size: 12px;
+  width: 60px;
+}

@@ -18,6 +18,10 @@ $(function () {
         $(this).addClass("active");
     });
 
+    $("#origin_url").click(function(){
+        window.open($(".swiper-slide-active img").attr("src"));
+    });
+
     scrollTop = 0;
     $("#imglist").on("click", "img", function () {
         scrollTop = document.body.scrollTop;
