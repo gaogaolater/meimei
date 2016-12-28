@@ -1,6 +1,9 @@
 var express = require("express");
 var app = express();
 var fs = require("fs");
+var http = require('http'); 
+var request = require("request");
+var cheerio = require("cheerio");
 
 app.use("/data", express.static('data'));
 app.use("/image", express.static('image'));
@@ -98,6 +101,23 @@ function getPageDataOrigin(pagenum, pagesize) {
 //初始化缓存
 getPageData();
 getPageDataOrigin();
+
+app.get("/proxy",function(req, res, next){
+	var url = decodeURIComponent(req.query.url);
+	request(url).pipe(res);
+});
+
+app.get("/get_video_url",function(req, res, next){
+	var url = decodeURIComponent(req.query.url);
+	request(url, function (error, response, body) {
+		if (!error && response.statusCode == 200) {
+			var url = body.match(/http(.*)\.mp4"/);
+			fs.writeFileSync("d:/1.html",body,"utf-8");
+			console.log(url);
+			res.send({url:""});
+		}
+	});
+});
 
 app.get("/getlist", function (req, res, next) {
 	var pagesize = req.query.pagesize;

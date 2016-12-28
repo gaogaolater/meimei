@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>require-test</title>
+    <script src="js/jquery-3.1.1.min.js"></script>
+</head>
+<style>
+*{
+    margin:0;
+    padding:0;
+}
+#list{
+    width:100%;
+    list-style: none;
+}
+#list li{
+    width:100%;
+    margin-top:3px;
+}
+#list li img{
+    width:100%;
+    height:auto;
+}
+</style>
+<body>
+    <ul id="list"></ul>
+<script type="text/javascript">
+$(function(){
+    var url = "http://iflow.uczzd.cn/iflow/api/v1/article/14841106631946263949/related_video?app=uc-iflow&cid=100&count=5&req_number=1&uc_param_str=dnnivebichfrmintcpgidsudsvme&dn=10466423654-9a13df42&nn=AAR985TC5zZeaK%2FU67GRUgC61BthRa30fmaa1MP7hD2e8g%3D%3D&ve=11.2.8.885&bi=35019&ch=yzappstore&fr=android&mi=U20&nt=2&pc=AAQ%2FJDdbUVTj%2FurM6xuCLCy3zX8vFwXtBSGkPr88iWjBOlXN%2FCCyVPAJnUFiC8dRJ2%2B3Yl5dRqpnAQlrbIVC%2F4ZX&gp=AAQs6olHR07xB4mOsKLXie%2F79OLd79gpajHEWy9ejUQotw%3D%3D&ut=AASpYipwuTuNlV9flDgvKrw6l0FW0kIpZgMyg3DHOPnvFg%3D%3D&ai=AARJuXje%2FDgJJnaUSMgzGWQLSjOva5AyuVIRKL0Ng5Ufgg%3D%3D&sv=ucrelease1&me=AAQbyilx%2BoOiiw9u0e7wyVgS";
+    $.get("/proxy?url="+encodeURIComponent(url),function(obj){
+        console.log(obj);
+        var html = template("test",obj.data);
+        $("#list").append(html);
+    });
+});
+
+function getUrl(obj){
+    var $ul = $(obj);
+    var id = $ul.attr("vurl").match(/v_(.*).html/)[1];
+    var api = "http://userapi.ums.uc.cn/video/info?id="+id;
+    $.get("/proxy?url="+encodeURIComponent(api),function(obj){
+        console.log(obj);
+        window.open(obj.data.cdn_url);
+        //$ul.append("<video src='"+obj.data.cdn_url+"'></video>");
+    });
+}
+</script>
+<script id="test" type="text/html">
+{{each articles as item i}}
+    <li url="{{item.url}}" vurl="{{item.videos[0].url}}" onclick="getUrl(this)"><img style="width:100%;height:auto;" src="{{item.thumbnails[0].url}}"/></li>
+{{/each}}
+</script>
+<script src="js/template.js"></script>
+</body>
+</html>
